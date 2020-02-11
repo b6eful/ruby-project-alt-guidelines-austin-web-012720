@@ -7,16 +7,16 @@ require 'gnuplot'
   def make_model
     master = self.organize_data(GetRequester.new.get_stock_body)
 
-    # value_pair_array = []
-    # i = 0
-    # while i < master[0].length do
-    #   pair = []
-    #
-    #   pair[0] = master[0][i]
-    #   pair[1] = master[1][i]
-    #   value_pair_array << pair
-    #     i += 1
-    #   end
+    value_pair_array = []
+    i = 0
+    while i < master[0].length do
+      pair = []
+
+      pair[0] = master[0][i]
+      pair[1] = master[1][i]
+      value_pair_array << pair
+        i += 1
+      end
       Gnuplot.open do |gp|
         Gnuplot::Plot.new( gp ) do |plot|
 
@@ -33,7 +33,7 @@ require 'gnuplot'
           end
         end
       end
-      
+
 
 
 
