@@ -1,5 +1,5 @@
 require_relative '../config/environment'
 
-User.username
+User
 
 puts "hello world"

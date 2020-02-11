@@ -19,13 +19,9 @@ ActiveRecord::Schema.define(version: 2020_02_10_194528) do
   end
 
   create_table "stocks", force: :cascade do |t|
-    t.integer "stock_id"
-    t.float "open"
-    t.float "close"
-    t.float "high"
-    t.float "low"
-    t.string "stock_name"
-    t.datetime "date_time_searched"
+    t.string "symbol"
+    t.integer "interval"
+    t.datetime "time_series"
   end
 
   create_table "users", force: :cascade do |t|
