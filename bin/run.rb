@@ -1,5 +1,5 @@
 require_relative '../config/environment'
-
-User
+require_relative'./main.rb'
+# require yout main file
 
 puts "hello world"
