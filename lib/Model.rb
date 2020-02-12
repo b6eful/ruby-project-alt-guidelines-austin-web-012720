@@ -6,26 +6,22 @@ require 'gnuplot'
 
   def make_model
     master = self.organize_data(GetRequester.new.get_stock_body)
-
-    value_pair_array = []
-    i = 0
-    while i < master[0].length do
-      pair = []
-
-      pair[0] = master[0][i]
-      pair[1] = master[1][i]
-      value_pair_array << pair
-        i += 1
-      end
+    master_time = master[0].map{|h| (h - master[0].min)/60} # in minutes
+    hash ={"Open":1,"High": 2,"Low":3,"Close":4,"Volume":5}
+    puts "Corresponding y-value for plot?"
+    puts "Choices: #{hash}"
+    puts "Input number"
+    input = gets.chomp
+    name_chosen = hash.key(input.to_i)
       Gnuplot.open do |gp|
         Gnuplot::Plot.new( gp ) do |plot|
 
-          plot.title  "Stock Table"
-          plot.xlabel "Time"
-          plot.ylabel "Open values"
+          plot.title  "Stock Table for #{master[8]} Time zone: #{master[7]}"
+          plot.xlabel "Time in minutes. Last point is current real time value corresponding to last refreshed time: #{master[6]}"
+          plot.ylabel "#{name_chosen} values"
 
-          x = master[0].collect { |v| v }
-          y = master[1].collect { |v| v }
+          x = master_time.collect { |v| v }
+          y = master[input.to_i].collect { |v| v }
 
           plot.data << Gnuplot::DataSet.new( [x, y] ) do |ds|
             ds.with = "linespoints"
@@ -35,13 +31,11 @@ require 'gnuplot'
       end
 
 
-
-
-  end
-
-  def value_pairs # This will take from master_array and make vlaue pairs for each index
+      puts "Created model for #{master[8]}"
 
   end
+
+
 
   def organize_data(json_data) #Organizes data into one large array which we can pull into the make_model
       #Master array help list:
@@ -52,8 +46,15 @@ require 'gnuplot'
       low_array = [] #3rd index
       close_array = [] #4th index
       volume_array = [] #5th index
+      if json_data.nil?
+        return "Program terminated"
+      end
+      date_refreshed = json_data.dig("Meta Data")["3. Last Refreshed"] # 6th
+      time_zone = json_data.dig("Meta Data")["6. Time Zone"] #7th
+      symbol =  json_data.dig("Meta Data")["2. Symbol"] #8th
       json_data.dig("Time Series (1min)").each do |k,v|
-        date_time_array << Time.parse(k).to_f
+
+        date_time_array << Time.parse(k).strftime("%s").to_i #Unix Time
         v.each_pair do |key,val|
           if key == "1. open"
             open_array << val.to_f
@@ -68,7 +69,15 @@ require 'gnuplot'
           end
         end
       end
-      master_array = [date_time_array.reverse,open_array.reverse,high_array.reverse,low_array.reverse,close_array.reverse,volume_array.reverse]
+      master_array = [date_time_array.reverse,
+        open_array.reverse,
+        high_array.reverse,
+        low_array.reverse,
+        close_array.reverse,
+        volume_array.reverse,
+        date_refreshed,
+        time_zone,
+        symbol]
     end
 
 

@@ -12,14 +12,18 @@ class GetRequester
   def get_stock_body
 
     array = self.parse_search_results #array of search results
-    pp array
-    puts "Choose stock num for which you want to model:"
-    user_input = gets.chomp.to_i
-      if (user_input.integer?) && (user_input < array.length)  #check to see if user input is int and within array length
-        searchsym = array[user_input - 1]
+
+    puts "Choose stock number for which you want to model:\ndata is more precise for companies whose stocks are constantly changing.\n"
+    array.each{|i| puts i + " => #{array.index(i)+1}" }
+    user_input = gets.chomp
+      if user_input.empty?
+        return nil
+      elsif (user_input.to_i < array.length)  #check to see if user input is int and within array length
+        searchsym = array[user_input.to_i - 1]
         uri = URI.parse(self.url_string + searchsym + '&interval=1min&outputsize=compact&apikey=IR07445BNSQ56179' )
         response = Net::HTTP.get_response(uri)
         return JSON.parse(response.body)
+
       else
         puts "Wrong input, try integer in range."
       end
@@ -40,6 +44,7 @@ class GetRequester
     search = Net::HTTP.get_response(uri)
 
     return search.body
+
   end
 
 
