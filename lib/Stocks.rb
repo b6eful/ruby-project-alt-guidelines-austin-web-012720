@@ -1,3 +1,4 @@
-class StockTable
+class StockTable < ActiveRecord::Base
+  
 
 end
