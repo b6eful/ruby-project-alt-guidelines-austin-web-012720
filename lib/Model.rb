@@ -1,27 +1,31 @@
-require_relative './GetRequests.rb'
-class Model < GetRequester
-require 'gnuplot'
 
+class Model < ActiveRecord::Base
+belongs_to :User
+require 'gnuplot'
 
 
   def make_model
     master = self.organize_data(GetRequester.new.get_stock_body)
     master_time = master[0].map{|h| (h - master[0].min)/60} # in minutes
-    hash ={"Open":1,"High": 2,"Low":3,"Close":4,"Volume":5}
-    puts "Corresponding y-value for plot?"
-    puts "Choices: #{hash}"
-    puts "Input number"
-    input = gets.chomp
-    name_chosen = hash.key(input.to_i)
+    choices ={Open: 1, High:2 ,Low:3 ,Close:4 ,Volume:5}
+
+
+
+
+
+    prompt = TTY::Prompt.new
+    input = prompt.enum_select("Corresponding y-value for plot?", choices )
+
       Gnuplot.open do |gp|
         Gnuplot::Plot.new( gp ) do |plot|
-
+          # plot.terminal "svg"
+          # plot.output File.expand_path("../#{master[8]}.svg", __FILE__)
           plot.title  "Stock Table for #{master[8]} Time zone: #{master[7]}"
           plot.xlabel "Time in minutes. Last point is current real time value corresponding to last refreshed time: #{master[6]}"
-          plot.ylabel "#{name_chosen} values"
+          plot.ylabel "#{input} values"
 
           x = master_time.collect { |v| v }
-          y = master[input.to_i].collect { |v| v }
+          y = master[input].collect { |v| v }
 
           plot.data << Gnuplot::DataSet.new( [x, y] ) do |ds|
             ds.with = "linespoints"

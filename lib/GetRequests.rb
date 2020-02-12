@@ -10,34 +10,26 @@ class GetRequester
 
   other_part = '&interval=1min&outputsize=compact&apikey=IR07445BNSQ56179'
   def get_stock_body
-
+    prompt = TTY::Prompt.new
     array = self.parse_search_results #array of search results
 
-    puts "Choose stock number for which you want to model:\ndata is more precise for companies whose stocks are constantly changing.\n"
-    array.each{|i| puts i + " => #{array.index(i)+1}" }
-    user_input = gets.chomp
-      if user_input.empty?
-        return nil
-      elsif (user_input.to_i < array.length)  #check to see if user input is int and within array length
-        searchsym = array[user_input.to_i - 1]
-        uri = URI.parse(self.url_string + searchsym + '&interval=1min&outputsize=compact&apikey=IR07445BNSQ56179' )
-        response = Net::HTTP.get_response(uri)
-        return JSON.parse(response.body)
+    searchsym  = prompt.enum_select("Choose stock number for which you want to model:\ndata is more precise for companies whose stocks are constantly changing.\n", array)
+    uri = URI.parse(self.url_string + searchsym + '&interval=1min&outputsize=compact&apikey=IR07445BNSQ56179' )
+    response = Net::HTTP.get_response(uri)
 
-      else
-        puts "Wrong input, try integer in range."
-      end
-
-
-
+    return JSON.parse(response.body)
 
   end
 
   def search_for_stock #Search for stock given user input
     url_search_string = 'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords='
-    puts "Type your search:"
 
-    input = gets.chomp
+    prompt = TTY::Prompt.new
+
+    input = prompt.ask("Type your search:") do |q|
+      q.required true
+    end
+    
     keyword_input_string = url_search_string + input +'&apikey=IR07445BNSQ56179'
 
     uri = URI.parse(keyword_input_string)

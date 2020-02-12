@@ -18,8 +18,9 @@ class User < ActiveRecord::Base
                 q.required true
                 q.validate /\A\w+\Z/
                 q.modify   :capitalize
+              end
             password = prompt.mask("Please create password")
-            end
+
             user = User.new
             user.user_name = username
             user.password = password
@@ -31,7 +32,7 @@ class User < ActiveRecord::Base
 
     def self.password
         prompt = TTY::Prompt.new
-        if self.loginquestion == true 
+        if self.loginquestion == true
             prompt.mask("ENTER PASSWORD")
         else
             prompt.mask("please create password")
