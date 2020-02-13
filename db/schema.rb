@@ -12,7 +12,9 @@
 
 ActiveRecord::Schema.define(version: 2020_02_10_194528) do
 
-  create_table "model", force: :cascade do |t|
+
+
+  create_table "models", force: :cascade do |t|
     t.string "stock_name"
     t.integer "model_type"
   end
