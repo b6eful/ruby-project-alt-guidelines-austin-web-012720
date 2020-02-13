@@ -1,4 +1,4 @@
-# Start running linear methods from files. 
+# Start running linear methods from files.
 
 require 'tty-prompt'
 
@@ -42,9 +42,6 @@ end
 def signup()
     signuprompt = TTY::Prompt.new
     name = signuprompt.ask("What would you like you username to be?")
-    if (User.where user_name: = name)
-        puts "That username is taken please try another"
-    else
-        User.create(user_name: name)
-    end
+    User.create(user_name: name)
+
 end

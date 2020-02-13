@@ -12,11 +12,11 @@
 
 ActiveRecord::Schema.define(version: 2020_02_10_194528) do
 
-
-
   create_table "models", force: :cascade do |t|
     t.string "stock_name"
     t.integer "model_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "stocks", force: :cascade do |t|
