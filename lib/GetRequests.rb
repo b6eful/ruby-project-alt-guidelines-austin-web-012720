@@ -22,6 +22,9 @@ class GetRequester
 
       uri = URI.parse(self.url_string + searchsym + '&interval=1min&outputsize=compact&apikey=IR07445BNSQ56179' )
       response = Net::HTTP.get_response(uri)
+
+      Stock.create(symbol: "#{searchsym}")
+      
       return JSON.parse(response.body)
   end
 

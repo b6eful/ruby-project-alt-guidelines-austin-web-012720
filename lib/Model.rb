@@ -37,6 +37,8 @@ require 'gnuplot'
 
 
       puts "Created model for #{master[8]}"
+      self.val = "#{choices.key(input)}"
+      self.file_path = "#{self.name}_#{master[8]}.svg"
       return 
   end
 
