@@ -13,21 +13,18 @@
 ActiveRecord::Schema.define(version: 2020_02_10_194528) do
 
   create_table "model", force: :cascade do |t|
-    t.string "user_id"
     t.string "stock_name"
     t.integer "model_type"
   end
 
   create_table "stocks", force: :cascade do |t|
     t.string "symbol"
-    t.integer "interval"
+    t.string "interval"
     t.datetime "time_series"
   end
 
   create_table "users", force: :cascade do |t|
-    t.integer "user_id"
     t.string "user_name"
-    t.string "password"
     t.string "stock_searched"
   end
 
