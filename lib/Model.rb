@@ -1,6 +1,7 @@
 
 class Model < ActiveRecord::Base
-belongs_to :User
+belongs_to :user
+has_many :stocks, through: :stock_models
 require 'gnuplot'
 
 
@@ -22,7 +23,7 @@ require 'gnuplot'
           # plot.output File.expand_path("../#{master[8]}.svg", __FILE__)
           plot.title  "Stock Table for #{master[8]} Time zone: #{master[7]}"
           plot.xlabel "Time in minutes. Last point is current real time value corresponding to last refreshed time: #{master[6]}"
-          plot.ylabel "#{input} values"
+          plot.ylabel "#{choices.key(input)} values"
 
           x = master_time.collect { |v| v }
           y = master[input].collect { |v| v }
@@ -36,7 +37,7 @@ require 'gnuplot'
 
 
       puts "Created model for #{master[8]}"
-
+      return 
   end
 
 
