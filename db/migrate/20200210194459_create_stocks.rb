@@ -1,4 +1,4 @@
-class Stocktable < ActiveRecord::Migration[5.2]
+class CreateStocks < ActiveRecord::Migration[5.2]
   def change
     create_table :stocks do |t|
       t.string :symbol
@@ -6,4 +6,5 @@ class Stocktable < ActiveRecord::Migration[5.2]
       t.datetime :time_series
     end
   end
+  
 end
