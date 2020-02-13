@@ -4,7 +4,6 @@ class CreateUsers < ActiveRecord::Migration[5.2]
       t.string :user_name
       t.string :stock_searched
 
-
     end
   end
   
