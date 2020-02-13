@@ -8,28 +8,57 @@ class GetRequester
     @url_string = url_string
   end
 
-  other_part = '&interval=1min&outputsize=compact&apikey=IR07445BNSQ56179'
+
   def get_stock_body
     prompt = TTY::Prompt.new
-    array = self.parse_search_results #array of search results
 
-    searchsym  = prompt.enum_select("Choose stock number for which you want to model:\ndata is more precise for companies whose stocks are constantly changing.\n", array)
-    uri = URI.parse(self.url_string + searchsym + '&interval=1min&outputsize=compact&apikey=IR07445BNSQ56179' )
-    response = Net::HTTP.get_response(uri)
+    string_prompt = "Choose stock number for which you want to model:\ndata is more precise for companies whose stocks are constantly changing.\n"
+    array = self.parse_search_results
+    if array.empty?
+      searchsym = 'Search again'
+    else
+      searchsym  = prompt.enum_select(string_prompt, active_color: :blue) do |menu|
+        menu.choice array[0]
+        menu.choice array[1]
+        menu.choice array[2]
+        menu.choice 'Search again'
+      end
+    end
+     while  ! array.include?(searchsym) do
+       array = self.parse_search_results #array of search results
+       if array.empty?
+         searchsym = 'Search again'
+       else
+         searchsym  = prompt.enum_select(string_prompt, active_color: :blue) do |menu|
+           menu.choice array[0]
+           menu.choice array[1]
+           menu.choice array[2]
+           menu.choice 'Search again'
+         end
+       end
+     end
 
-    return JSON.parse(response.body)
-
+      uri = URI.parse(self.url_string + searchsym + '&interval=1min&outputsize=compact&apikey=IR07445BNSQ56179' )
+      response = Net::HTTP.get_response(uri)
+      return JSON.parse(response.body)
   end
+
+
+
+
+
+
+
 
   def search_for_stock #Search for stock given user input
     url_search_string = 'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords='
 
     prompt = TTY::Prompt.new
 
-    input = prompt.ask("Type your search:") do |q|
+    input = prompt.ask("Type your search:", active_color: :blue) do |q|
       q.required true
     end
-    
+
     keyword_input_string = url_search_string + input +'&apikey=IR07445BNSQ56179'
 
     uri = URI.parse(keyword_input_string)
