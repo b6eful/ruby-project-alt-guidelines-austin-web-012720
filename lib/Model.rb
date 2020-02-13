@@ -1,7 +1,8 @@
 
 class Model < ActiveRecord::Base
 belongs_to :user
-has_many :stocks, through: :stock_models
+#has_many :stocks, through: :stock_models
+has_and_belongs_to_many :stocks
 require 'gnuplot'
 
 
@@ -39,6 +40,7 @@ require 'gnuplot'
       puts "Created model for #{master[8]}"
       self.val = "#{choices.key(input)}"
       self.file_path = "#{self.name}_#{master[8]}.svg"
+      self.save
       return
   end
 
