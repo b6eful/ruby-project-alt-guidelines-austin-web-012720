@@ -14,6 +14,19 @@ class GetRequester
 
     string_prompt = "Choose stock number for which you want to model:\ndata is more precise for companies whose stocks are constantly changing.\n"
     array = self.parse_search_results
+    searchsym = self.search_check(array,string_prompt)
+     while  ! array.include?(searchsym) do
+       array = self.parse_search_results #array of search results
+       searchsym = self.search_check(array,string_prompt)
+     end
+
+      uri = URI.parse(self.url_string + searchsym + '&interval=1min&outputsize=compact&apikey=IR07445BNSQ56179' )
+      response = Net::HTTP.get_response(uri)
+      return JSON.parse(response.body)
+  end
+
+  def search_check(array, string_prompt)
+    prompt = TTY::Prompt.new
     if array.empty?
       searchsym = 'Search again'
     else
@@ -24,25 +37,8 @@ class GetRequester
         menu.choice 'Search again'
       end
     end
-     while  ! array.include?(searchsym) do
-       array = self.parse_search_results #array of search results
-       if array.empty?
-         searchsym = 'Search again'
-       else
-         searchsym  = prompt.enum_select(string_prompt, active_color: :blue) do |menu|
-           menu.choice array[0]
-           menu.choice array[1]
-           menu.choice array[2]
-           menu.choice 'Search again'
-         end
-       end
-     end
-
-      uri = URI.parse(self.url_string + searchsym + '&interval=1min&outputsize=compact&apikey=IR07445BNSQ56179' )
-      response = Net::HTTP.get_response(uri)
-      return JSON.parse(response.body)
+    return searchsym
   end
-
 
 
 
