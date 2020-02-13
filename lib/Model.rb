@@ -19,8 +19,8 @@ require 'gnuplot'
 
       Gnuplot.open do |gp|
         Gnuplot::Plot.new( gp ) do |plot|
-          # plot.terminal "svg"
-          # plot.output File.expand_path("../#{master[8]}.svg", __FILE__)
+          plot.terminal "svg"
+          plot.output File.expand_path("../Graphs/#{self.name}_#{master[8]}.svg", __FILE__)
           plot.title  "Stock Table for #{master[8]} Time zone: #{master[7]}"
           plot.xlabel "Time in minutes. Last point is current real time value corresponding to last refreshed time: #{master[6]}"
           plot.ylabel "#{choices.key(input)} values"
@@ -39,7 +39,7 @@ require 'gnuplot'
       puts "Created model for #{master[8]}"
       self.val = "#{choices.key(input)}"
       self.file_path = "#{self.name}_#{master[8]}.svg"
-      return 
+      return
   end
 
 
