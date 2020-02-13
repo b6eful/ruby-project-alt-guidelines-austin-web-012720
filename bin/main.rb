@@ -24,16 +24,15 @@ end
 
     #this method logs you in, Prompt is created, checks if the var assoicated with the intial prompt equals a value thats in the db if it is associated then login
     #^if prompt is 
-def login
+def login()
     prompt = TTY::Prompt.new
-    username = prompt.ask("Please enter Username")
-    if (User.where(user_name: username).length != 0)
-        user = User.where(user_name: username)[0]
-        if login(user.id)
-            return true
+    username = prompt.ask("Please enter Username", required: true)
+    if (User.where(name: username).length != 0)
+        user = User.where(name: username)[0]
+        login(user.id)
         end  
     elsif
-        second = prompt.select("Username does not exist") do |y|
+        second = prompt.select("Username does not exist", required: true) do |y|
           y.choice 'Sign Up', 1
           y.choice 'Try Again', 2
         end
@@ -49,14 +48,13 @@ end
 
 def signup()
     prompt = TTY::Prompt.new
-    name = prompt.ask("What would you like you username to be?")
+    name = prompt.ask("What would you like you username to be?", required: true)
     if 
-        (User.where(user_name: name).length !=0)
+        (User.where(name: name).length !=0)
         puts "That username is taken please choose another"
         signup()
     else
-        User.create(user_name: name)
-        user = User.where(user_name: name)[0]
+        user = User.create(name: name)
         login(user.id)
     end
 end
@@ -69,27 +67,25 @@ end
 def signedin()
     prompt = TTY::Prompt.new
     if login(user.id) == true
-        answer = prompt.choice("What would you like to do?") do |choices|
+        answer = prompt.choice("What would you like to do?", required: true) do |choices|
             choices.choice "Create Model", 1
             choices.choice "View past models", 2
         end
 
         case answer
         when 1
-            createmodel()
+            mod_name = prompt.ask("Name your model", required: true)
+            self.models.create(name: mod_name).make_model
         when 2
-            viewmodel()
+            if self.models.all.empty?
+                puts "You dont have any models"
+                signedin()
+            else
+                selection = prompt.enum_select("Select graph you wish to view:",self.models.all)
+                File.open("../Graphs/#{selection.file_path}")
+                signedin()
+            end
+
         end
     end
 end
-
-#executes the getrequest model
-def createmodel()
-    GetRequests.rb
-end
-
-
-def viewmodel()
-end
-
-
