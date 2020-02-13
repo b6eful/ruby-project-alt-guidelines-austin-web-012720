@@ -10,24 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_10_194528) do
+ActiveRecord::Schema.define(version: 2020_02_13_195727) do
 
   create_table "models", force: :cascade do |t|
-    t.string "stock_name"
-    t.integer "model_type"
+    t.string "name"
+    t.string "val"
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_models_on_user_id"
+  end
+
+  create_table "stock_models", force: :cascade do |t|
+    t.integer "stock_id"
+    t.integer "model_id"
+    t.index ["model_id"], name: "index_stock_models_on_model_id"
+    t.index ["stock_id"], name: "index_stock_models_on_stock_id"
   end
 
   create_table "stocks", force: :cascade do |t|
     t.string "symbol"
-    t.string "interval"
-    t.datetime "time_series"
+    t.datetime "last_refreshed"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "user_name"
-    t.string "stock_searched"
+    t.string "name"
   end
 
 end
