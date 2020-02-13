@@ -1,3 +1,3 @@
 class Stock < ActiveRecord::Base
-  has_many :stock_models
+  has_many :models, through: :stock_models
 end

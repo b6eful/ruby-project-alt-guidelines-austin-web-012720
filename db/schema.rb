@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 2020_02_13_195727) do
   create_table "models", force: :cascade do |t|
     t.string "name"
     t.string "val"
+    t.string "file_path"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -30,7 +31,6 @@ ActiveRecord::Schema.define(version: 2020_02_13_195727) do
 
   create_table "stocks", force: :cascade do |t|
     t.string "symbol"
-    t.datetime "last_refreshed"
   end
 
   create_table "users", force: :cascade do |t|
