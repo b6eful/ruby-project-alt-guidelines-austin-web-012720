@@ -37,7 +37,7 @@ require 'gnuplot'
 
 
       puts "Created model for #{master[8]}"
-      return self.stocks.create(stock_name: master[8],stock_type: input,time_series: master[6])
+      return 
   end
 
 
