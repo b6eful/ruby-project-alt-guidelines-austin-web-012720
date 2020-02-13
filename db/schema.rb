@@ -12,6 +12,8 @@
 
 ActiveRecord::Schema.define(version: 2020_02_10_194528) do
 
+
+
   create_table "models", force: :cascade do |t|
     t.string "stock_name"
     t.integer "model_type"
@@ -25,7 +27,6 @@ ActiveRecord::Schema.define(version: 2020_02_10_194528) do
 
   create_table "users", force: :cascade do |t|
     t.string "user_name"
-    t.string "password"
     t.string "stock_searched"
   end
 
