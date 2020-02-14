@@ -4,5 +4,5 @@ require_relative'./main.rb'
 # require yout main file
 
 puts "hello world"
-startup()
+Main.new.startup()
 #Model.new.make_model
